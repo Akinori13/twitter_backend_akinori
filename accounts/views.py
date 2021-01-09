@@ -17,8 +17,6 @@ def signup(request):
     return render(request, 'accounts/signup.html', {'form': form})
 
 class IndexView(generic.ListView):
+    model = User
     template_name = 'accounts/index.html'
     context_object_name = 'users'
-
-    def get_queryset(self):
-        return User.objects.all()
