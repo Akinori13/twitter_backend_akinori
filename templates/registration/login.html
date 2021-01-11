@@ -1,0 +1,23 @@
+{% extends "common/base.html" %}
+
+{% block titele %}ログイン{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="row">
+        <div class="col-12">
+            <h1>ログイン</h1>
+        </div>
+        <div class="col-12">
+            <form method="post">
+    
+                {% csrf_token %}
+                
+                {{ form.as_p }}
+                
+                <input class="btn btn-primary" type="submit" value="ログイン">
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

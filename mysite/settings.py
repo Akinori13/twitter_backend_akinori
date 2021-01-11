@@ -123,3 +123,7 @@ STATIC_URL = '/static/'
 STATIC_ROOT = BASE_DIR / 'static'
 
 AUTH_USER_MODEL = 'accounts.User'
+
+LOGIN_REDIRECT_URL = 'tweets:timeline'
+LOGIN_URL = 'login'
+LOGOUT_REDIRECT_URL = 'login'
