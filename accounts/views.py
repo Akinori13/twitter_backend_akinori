@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from django.contrib.auth import authenticate
+from django.contrib.auth import authenticate, login
 from .forms import CustomUserCreationForm
 from .models import User
 from django.views import generic
@@ -10,13 +10,9 @@ def signup(request):
         form = CustomUserCreationForm(request.POST)
         if form.is_valid():
             user = form.save()
-            return redirect('index')
+            login(request, user)
+            return redirect('tweets:timeline')
     else:
         form = CustomUserCreationForm()
     
     return render(request, 'accounts/signup.html', {'form': form})
-
-class IndexView(generic.ListView):
-    model = User
-    template_name = 'accounts/index.html'
-    context_object_name = 'users'
