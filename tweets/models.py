@@ -9,3 +9,4 @@ class Tweet(models.Model):
     )
     created_at = models.DateTimeField(auto_now_add=True) # 登録タイムスタンプ
     updated_at = models.DateTimeField(auto_now=True) # 更新タイムスタンプ
+    
