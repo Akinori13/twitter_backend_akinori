@@ -1,0 +1,28 @@
+{% extends "common/base.html" %}
+
+{% block titele %}TimeLine{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="row">
+        <div class="col-12">
+            <h1>更新</h1>
+        </div>
+        <div class="col-12">
+            {% if form.errors %}
+               {{ form.non_field_errors }}
+            {% endif %}
+        </div>
+        <div class="col-12">
+            <form method="post" action="">
+                {% csrf_token %}
+                <div class="mb-3">
+                    <label class="form-label">{{ form.text.label }}</label>
+                    <textarea name="text" id="id_text" cols="40" rows="10" maxlength="140" required class="form-control">{{ form.text.value }}</textarea>
+                </div>
+                <input type="submit" value="更新" class="btn btn-primary">
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
