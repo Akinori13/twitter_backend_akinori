@@ -3,12 +3,14 @@ from . import views
 
 app_name = 'tweets'
 urlpatterns = [
+    # Index
+    path('timeline', views.TimelineView.as_view(), name='timeline'),
     # Read
-    path('timeline', views.timeline, name='timeline'),
+    path('<int:pk>', views.TweetDetailView.as_view(), name='detail'),
     # Create
-    path('create', views.create, name='create'),
+    path('create', views.TweetCreateView.as_view(), name='create'),
     # Update
-    path('edit', views.edit, name='edit'),
+    path('<int:pk>/update', views.TweetUpdateView.as_view(), name='update'),
     # Delete
-    path('delete', views.delete, name='delete'),
+    path('<int:pk>/delete', views.TweetDeleteView.as_view(), name='delete'),
 ]
