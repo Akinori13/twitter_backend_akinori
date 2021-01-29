@@ -39,4 +39,3 @@ class TweetDeleteView(LoginRequiredMixin, DeleteView):
     model = Tweet
     template_name = 'tweets/delete_confirm.html'
     success_url = reverse_lazy('tweets:timeline')
-    
