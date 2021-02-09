@@ -6,7 +6,7 @@
 <section class="container">
     <div class="row">
         <div class="col-12">
-            <h1>Timeline</h1>
+            <h1>Tweets</h1>
         </div>
     </div>
 </section>
@@ -27,7 +27,7 @@
         <div class="col-12 col-md-4">
             <ul class="list-unstyled mb-0">
                 <li>{{ tweet.created_at }}</li>
-                <li><a href="{% url 'tweets:user_tweets' tweet.user.id %}">{{ tweet.user }}</a></li>
+                <li>{{ tweet.user }}</li>
             </ul>
             <ul class="d-flex list-unstyled mb-0">
                 <li><a href="{% url 'tweets:detail' tweet.id %}" class="d-block"><i class="far fa-eye fa-fw"></i></a></li>
