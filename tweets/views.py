@@ -4,6 +4,7 @@ from django.shortcuts import render
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 from django.urls import reverse_lazy
 from .models import Tweet
+from accounts.models import User
 
 
 # Create your views here.
@@ -43,6 +44,7 @@ class TweetDeleteView(LoginRequiredMixin, DeleteView):
     success_url = reverse_lazy('tweets:timeline')
 
 def TweetsView(request, user_id):
-    queryset = Tweet.objects.filter(user__id=user_id)
-    context = {'tweets':queryset}
+    queryset1 = Tweet.objects.filter(user__id=user_id)
+    queryset2 = User.objects.get(pk=user_id)
+    context = {'tweets':queryset1,'user':queryset2}
     return render(request, 'tweets/index.html', context)
