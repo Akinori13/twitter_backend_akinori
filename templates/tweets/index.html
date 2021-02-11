@@ -14,31 +14,33 @@
 <section class="container">
     <div class="row">
         <div class="col-12">
-            <a href="{% url 'tweets:create' %}">
-                <i class="far fa-plus-square fa-2x text-info"></i>
-            </a>
+            <div class="card">
+                <div class="card-header">
+                    {{ user }}
+                </div>
+                <div class="card-body">
+                    <p>年齢：{{ user.age }}</p>
+                    <a href="#" class="btn btn-sm btn-outline-info">フォロー</a>
+                </div>
+            </div>
         </div>
     </div>
 </section>
 
 <section class="container mt-4">
-    {% for tweet in tweets %}
-    <article class="row mb-3 bg-light">
-        <div class="col-12 col-md-4">
-            <ul class="list-unstyled mb-0">
-                <li>{{ tweet.created_at }}</li>
-                <li>{{ tweet.user }}</li>
-            </ul>
-            <ul class="d-flex list-unstyled mb-0">
-                <li><a href="{% url 'tweets:detail' tweet.id %}" class="d-block"><i class="far fa-eye fa-fw"></i></a></li>
-                <li><a href="{% url 'tweets:update' tweet.id %}" class="d-block"><i class="far fa-edit fa-fw text-success"></i></a></li>
-                <li><a href="{% url 'tweets:delete' tweet.id %}" class="d-block text-danger"><i class="fas fa-trash fa-fw"></i></a></li>
-            </ul>
+    <div class="row">
+        {% for tweet in tweets %}
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header bg-info">
+                    {{ tweet.created_at }}
+                </div>
+                <div class="card-body">
+                    <p>{{ tweet.text }}</p>
+                </div>
+            </div>
         </div>
-        <div class="col-12 col-md-8">
-            {{ tweet.text }}
-        </div>
-    </article>
     {% endfor %}
+    </div>
 </section>
 {% endblock %}
