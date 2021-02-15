@@ -1,7 +1,7 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render
-from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
+from django.views.generic import *
 from django.urls import reverse_lazy
 from .models import Tweet
 from accounts.models import User
@@ -43,6 +43,7 @@ class TweetDeleteView(LoginRequiredMixin, DeleteView):
     template_name = 'tweets/delete_confirm.html'
     success_url = reverse_lazy('tweets:timeline')
 
+@login_required
 def TweetsView(request, user_id):
     queryset1 = Tweet.objects.filter(user__id=user_id)
     queryset2 = User.objects.get(pk=user_id)
