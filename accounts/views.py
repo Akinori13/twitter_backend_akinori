@@ -1,8 +1,12 @@
 from django.shortcuts import render, redirect
+from django.http import HttpResponseRedirect
 from django.contrib.auth import authenticate, login
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.decorators import login_required
+from django.views.generic import *
+from django.urls import reverse_lazy
 from .forms import CustomUserCreationForm
-from .models import User
-from django.views import generic
+from .models import User, Connect
 
 # Create your views here.
 def signup(request):
@@ -16,3 +20,48 @@ def signup(request):
         form = CustomUserCreationForm()
     
     return render(request, 'accounts/signup.html', {'form': form})
+
+class FollowIndexView(LoginRequiredMixin, ListView):
+    template_name = 'accounts/follow/index.html'
+    context_object_name = 'followers'
+
+    def get_queryset(self):
+        return Connect.objects.filter(followed_user__id=self.kwargs['user_id']).select_related('user')
+
+class FollowCreateView(LoginRequiredMixin, CreateView):
+    model = Connect
+    fields = []
+    template_name = 'accounts/follow/create.html'
+    success_url = reverse_lazy('tweets:timeline')
+
+    def form_valid(self, form):
+        form.instance.user = User.objects.get(pk=self.request.user.id)
+        form.instance.followed_user = User.objects.get(pk=self.kwargs['user_id'])
+
+        if form.instance.user == form.instance.followed_user:
+            form.add_error(None, "You cannot follow yourself.")
+            return super().form_invalid(form)
+        elif Connect.objects.filter(user=form.instance.user, followed_user=form.instance.followed_user).exists():
+            form.add_error(None, "You've already followed this account.")
+            return super().form_invalid(form)
+        
+        return super().form_valid(form)
+
+@login_required
+def FollowDeleteView(request, user_id):
+    user = User.objects.get(pk=request.user.id)
+    followed_user = User.objects.get(pk=user_id)
+
+    connect = Connect.objects.filter(
+        user=user, 
+        followed_user=followed_user
+    )
+
+    connect.delete()
+
+    return HttpResponseRedirect(
+        reverse_lazy(
+            'tweets:user_tweets',
+            args=[user_id]
+        )
+    )

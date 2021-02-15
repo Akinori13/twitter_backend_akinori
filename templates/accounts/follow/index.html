@@ -1,0 +1,27 @@
+{% extends "common/base.html" %}
+
+{% block titele %}Followers{% endblock %}
+
+{% block content %}
+<section class="container">
+    <div class="row">
+        <div class="col-12">
+            <h1>Followers</h1>
+        </div>
+    </div>
+</section>
+
+<section class="container mt-4">
+    <div class="row">
+        {% for follower in followers %}
+        <div class="col-12">
+            <div class="card">
+                <div class="card-body">
+                    <a href="{% url 'tweets:user_tweets' follower.user.id %}">{{ follower.user }}</a>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</section>
+{% endblock %}
