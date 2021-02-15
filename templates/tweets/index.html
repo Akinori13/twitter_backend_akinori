@@ -1,6 +1,6 @@
 {% extends "common/base.html" %}
 
-{% block titele %}TimeLine{% endblock %}
+{% block titele %}Tweets{% endblock %}
 
 {% block content %}
 <section class="container">
@@ -20,7 +20,9 @@
                 </div>
                 <div class="card-body">
                     <p>年齢：{{ user.age }}</p>
-                    <a href="#" class="btn btn-sm btn-outline-info">フォロー</a>
+                    <a href="{% url 'follow_create' user.id %}" class="btn btn-sm btn-outline-info">フォロー</a>
+                    <a href="{% url 'follow_delete' user.id %}" class="btn btn-sm btn-outline-danger">アンフォロー</a>
+                    <a href="{% url 'follow_index' user.id %}" class="btn btn-sm btn-outline-info">フォローワー一覧</a>
                 </div>
             </div>
         </div>
@@ -31,7 +33,7 @@
     <div class="row">
         {% for tweet in tweets %}
         <div class="col-12">
-            <div class="card">
+            <div class="card mb-5">
                 <div class="card-header bg-info">
                     {{ tweet.created_at }}
                 </div>
@@ -40,7 +42,7 @@
                 </div>
             </div>
         </div>
-    {% endfor %}
+        {% endfor %}
     </div>
 </section>
 {% endblock %}

@@ -22,23 +22,25 @@
 </section>
 
 <section class="container mt-4">
-    {% for tweet in tweets %}
-    <article class="row mb-3 bg-light">
-        <div class="col-12 col-md-4">
-            <ul class="list-unstyled mb-0">
-                <li>{{ tweet.created_at }}</li>
-                <li><a href="{% url 'tweets:user_tweets' tweet.user.id %}">{{ tweet.user }}</a></li>
-            </ul>
-            <ul class="d-flex list-unstyled mb-0">
-                <li><a href="{% url 'tweets:detail' tweet.id %}" class="d-block"><i class="far fa-eye fa-fw"></i></a></li>
-                <li><a href="{% url 'tweets:update' tweet.id %}" class="d-block"><i class="far fa-edit fa-fw text-success"></i></a></li>
-                <li><a href="{% url 'tweets:delete' tweet.id %}" class="d-block text-danger"><i class="fas fa-trash fa-fw"></i></a></li>
-            </ul>
+    <div class="row">
+        {% for tweet in tweets %}
+        <div class="col-12">
+            <div class="card mb-5">
+                <div class="card-header bg-light">
+                    <a href="{% url 'tweets:user_tweets' tweet.user.id %}">{{ tweet.user }}</a>
+                    {{ tweet.created_at }}
+                </div>
+                <div class="card-body">
+                    <p>{{ tweet.text }}</p>
+                </div>
+                <div class="card-footer">
+                    <a href="{% url 'tweets:detail' tweet.id %}"><i class="far fa-eye fa-fw"></i></a>
+                    <a href="{% url 'tweets:update' tweet.id %}" ><i class="far fa-edit fa-fw text-success"></i></a>
+                    <a href="{% url 'tweets:delete' tweet.id %}" ><i class="fas fa-trash fa-fw text-danger"></i></a>
+                </div>
+            </div>
         </div>
-        <div class="col-12 col-md-8">
-            {{ tweet.text }}
-        </div>
-    </article>
-    {% endfor %}
+        {% endfor %}
+    </div>
 </section>
 {% endblock %}
