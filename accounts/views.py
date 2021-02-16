@@ -21,14 +21,14 @@ def signup(request):
     
     return render(request, 'accounts/signup.html', {'form': form})
 
-class FollowIndexView(LoginRequiredMixin, .genericListView):
+class FollowIndexView(LoginRequiredMixin, generic.ListView):
     template_name = 'accounts/follow/index.html'
     context_object_name = 'followers'
 
     def get_queryset(self):
         return Connect.objects.filter(followed_user__id=self.kwargs['user_id']).select_related('user')
 
-class FollowCreateView(LoginRequiredMixin, .genericCreateView):
+class FollowCreateView(LoginRequiredMixin, generic.CreateView):
     model = Connect
     fields = []
     template_name = 'accounts/follow/create.html'
