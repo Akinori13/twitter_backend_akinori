@@ -1,24 +1,28 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
+from django.contrib.auth.decorators import login_required
+from django.shortcuts import render, get_object_or_404
+from django.views import generic
 from django.urls import reverse_lazy
+
 from .models import Tweet
+from accounts.models import User
 
 
 # Create your views here.
-class TimelineView(LoginRequiredMixin, ListView):
+class TimelineView(LoginRequiredMixin, generic.ListView):
     queryset = Tweet.objects.order_by('-created_at')
     paginate_by = 4
     template_name = 'tweets/timeline.html'
     context_object_name = 'tweets'
 
 
-class TweetDetailView(LoginRequiredMixin, DetailView):
+class TweetDetailView(LoginRequiredMixin, generic.DetailView):
     model = Tweet
     template_name = 'tweets/detail.html'
     context_object_name = 'tweet'
 
 
-class TweetCreateView(LoginRequiredMixin, CreateView):
+class TweetCreateView(LoginRequiredMixin, generic.CreateView):
     model = Tweet
     fields = ['text']
     template_name = 'tweets/create.html'
@@ -28,14 +32,21 @@ class TweetCreateView(LoginRequiredMixin, CreateView):
         form.instance.user = self.request.user
         return super().form_valid(form)
 
-class TweetUpdateView(LoginRequiredMixin, UpdateView):
+class TweetUpdateView(LoginRequiredMixin, generic.UpdateView):
     model = Tweet
     fields = ['text']
     template_name = 'tweets/update.html'
     success_url = reverse_lazy('tweets:timeline')
 
 
-class TweetDeleteView(LoginRequiredMixin, DeleteView):
+class TweetDeleteView(LoginRequiredMixin, generic.DeleteView):
     model = Tweet
     template_name = 'tweets/delete_confirm.html'
     success_url = reverse_lazy('tweets:timeline')
+
+@login_required
+def TweetsView(request, user_id):
+    user = get_object_or_404(User, pk=user_id)
+    tweets = user.tweet_set.all()
+    context = {'user':user, 'tweets':tweets}
+    return render(request, 'tweets/index.html', context)
