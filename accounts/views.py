@@ -55,7 +55,7 @@ def FollowDeleteView(request, user_id):
     try:
         followed_user = User.objects.get(pk=user_id)
     except User.DoesNotExist:
-        raise Http404("This user is not exist.")
+        raise Http404("This user does not exist.")
 
     connect = Connect.objects.filter(
             user=user, 
