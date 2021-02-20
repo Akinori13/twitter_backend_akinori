@@ -61,9 +61,7 @@ def TweetsView(request, user_id):
 def LikeView(request, pk):
     tweet = get_object_or_404(Tweet, pk=pk)
     like = Like.objects.filter(user=request.user, tweet=tweet)
-    if like:
-        pass
-    else:
+    if not like:
         like.create(user=request.user, tweet=tweet)
 
     return JsonResponse({
