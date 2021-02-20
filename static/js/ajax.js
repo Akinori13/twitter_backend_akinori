@@ -15,6 +15,18 @@ $(function(){
         return cookieValue;
     }
 
+    function getReplacedUrl(pre_url, before_text, after_text) {
+        let splited_url = pre_url.split('/');
+        let post_url = '';
+        for (var i = 1; i < splited_url.length; i++) {
+            if (splited_url[i] == before_text) {
+                splited_url[i] = after_text;
+            }
+            post_url =  post_url + '/' + splited_url[i];
+        }
+        return post_url;
+    }
+
     // Like function
     $("[data-action='like']").on('click', function(e){
         e.preventDefault();
@@ -31,6 +43,11 @@ $(function(){
             function (res) {
                 el.children('i').toggleClass('text-danger fas far');
                 el.children('span').text(res['likes_num']);
+                if (res['is_liked']){
+                    el.attr('data-action-url', getReplacedUrl(action_url, 'like', 'unlike'));
+                }else{
+                    el.attr('data-action-url', getReplacedUrl(action_url, 'unlike', 'like'));
+                }
             }
         );
     });
