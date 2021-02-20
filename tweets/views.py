@@ -62,8 +62,24 @@ def LikeView(request, pk):
     tweet = get_object_or_404(Tweet, pk=pk)
     like = Like.objects.filter(user=request.user, tweet=tweet)
     if like:
-        like.delete()
+        pass
     else:
         like.create(user=request.user, tweet=tweet)
 
-    return JsonResponse({'likes_num': tweet.like_set.count()})
+    return JsonResponse({
+        'likes_num': tweet.like_set.count(),
+        'is_liked': True
+    })
+
+@login_required
+@require_POST
+def UnlikeView(request, pk):
+    tweet = get_object_or_404(Tweet, pk=pk)
+    like = Like.objects.filter(user=request.user, tweet=tweet)
+    if like:
+        like.delete()
+
+    return JsonResponse({
+        'likes_num': tweet.like_set.count(),
+        'is_liked': False
+    })
