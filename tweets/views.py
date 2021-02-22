@@ -2,18 +2,22 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, get_object_or_404
 from django.views import generic
+from django.views.decorators.http import require_POST
 from django.urls import reverse_lazy
+from django.http import JsonResponse
+from django.db import IntegrityError
 
-from .models import Tweet
+from .models import Tweet, Like
 from accounts.models import User
 
 
 # Create your views here.
-class TimelineView(LoginRequiredMixin, generic.ListView):
-    queryset = Tweet.objects.order_by('-created_at')
-    paginate_by = 4
-    template_name = 'tweets/timeline.html'
-    context_object_name = 'tweets'
+@login_required
+def TimelineView(request):
+    tweets = Tweet.objects.order_by('-created_at')
+    liked_list = request.user.like_set.values_list('tweet', flat=True)
+    context = {'liked_list':liked_list, 'tweets':tweets}
+    return render(request, 'tweets/timeline.html', context)
 
 
 class TweetDetailView(LoginRequiredMixin, generic.DetailView):
@@ -49,4 +53,31 @@ def TweetsView(request, user_id):
     user = get_object_or_404(User, pk=user_id)
     tweets = user.tweet_set.all()
     context = {'user':user, 'tweets':tweets}
+    
     return render(request, 'tweets/index.html', context)
+
+@login_required
+@require_POST
+def LikeView(request, pk):
+    tweet = get_object_or_404(Tweet, pk=pk)
+    like = Like.objects.filter(user=request.user, tweet=tweet)
+    if not like:
+        like.create(user=request.user, tweet=tweet)
+
+    return JsonResponse({
+        'likes_num': tweet.like_set.count(),
+        'is_liked': True
+    })
+
+@login_required
+@require_POST
+def UnlikeView(request, pk):
+    tweet = get_object_or_404(Tweet, pk=pk)
+    like = Like.objects.filter(user=request.user, tweet=tweet)
+    if like:
+        like.delete()
+
+    return JsonResponse({
+        'likes_num': tweet.like_set.count(),
+        'is_liked': False
+    })

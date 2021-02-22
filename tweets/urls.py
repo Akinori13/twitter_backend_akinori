@@ -4,7 +4,7 @@ from . import views
 app_name = 'tweets'
 urlpatterns = [
     # Index(Tweets written by all users)
-    path('timeline', views.TimelineView.as_view(), name='timeline'),
+    path('timeline', views.TimelineView, name='timeline'),
     # Index(Tweets written by a specific user)
     path('<int:user_id>/tweets', views.TweetsView, name='user_tweets'),
     # Read
@@ -15,4 +15,8 @@ urlpatterns = [
     path('tweets/<int:pk>/update', views.TweetUpdateView.as_view(), name='update'),
     # Delete
     path('tweets/<int:pk>/delete', views.TweetDeleteView.as_view(), name='delete'),
+    # Like
+    path('tweets/<int:pk>/like', views.LikeView, name='like'),
+    # Unike
+    path('tweets/<int:pk>/unlike', views.UnlikeView, name='unlike'),
 ]
